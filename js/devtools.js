@@ -83,11 +83,13 @@
 										}
 										if (typeof data.scenario[i].damage != "undefined") {
 											for (var j = 0, len_j = data.scenario[i].damage.length; j < len_j; j++) {
-												if (isNaN(data.scenario[i].damage[j][0].value)) {
-													continue;
+												for (var k = 0, len_k = data.scenario[i].damage[j].length; k < len_k; k++) {
+													if (isNaN(data.scenario[i].damage[j][k].value)) {
+														continue;
+													}
+													dmg_last_turn += data.scenario[i].damage[j][k].value;
+													total_dmg += data.scenario[i].damage[j][k].value;
 												}
-												dmg_last_turn += data.scenario[i].damage[j][0].value;
-												total_dmg += data.scenario[i].damage[j][0].value;
 											}
 											isAttack = true;
 											isDamage = true;
