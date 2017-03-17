@@ -1,3 +1,36 @@
+class Ability {
+	constructor(id, name, img, type, description) {
+		this.id = id;
+		this.name = name;
+		this.img = img;
+		this.type = type;
+		this.description = description;
+		this.total_use = 0;
+		this.total_dmg = 0;
+		this.total_crits = 0;
+		this.highest_dmg = 0;
+	}
+}
+
+class Character { 
+	constructor(name, pid, hp, hpmax, alive, cjs, img, pos, abilities) {
+		this.name = name;
+		this.pid = pid;
+		this.currhp = hp;
+		this.maxhp = hpmax;
+		this.isAlive = alive;
+		this.cjs = cjs; //no idea what this is
+		this.img = img;
+		this.pos = pos;
+		this.abilities = abilities;
+		this.totaldmg = 0;
+		this.dmg_last_turn = 0;
+		this.highest_turn_dmg = 0;
+		this.total_atks = 0;
+		this.total_crits = 0;
+	}
+}
+
 (function() {
 
     var total_dmg = 0,
@@ -12,6 +45,8 @@
         $highest_turn_dmg = $(".highstturndmg"),
         dmg_last_turn = 0,
         $dmg_last_turn = $(".dmglastturn"),
+		avg_turn_time = 0.0,
+		$avg_turn_time = $(".avgturntime"),
         $timer = $(".timer"),
         $t_start = $("#start"),
         $t_stop = $("#stop"),
