@@ -1,0 +1,397 @@
+.disabled {
+	opacity:.6;
+}
+* {
+    margin: 0px;
+    padding: 0px;
+    color: #111;
+    font-size: 11px;
+    color: rgb(48, 57, 66)
+}
+body {
+    font-family: "Droid Sans", "Lucida Grande", sans-serif
+}
+h2 {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    height: 22px;
+    line-height: 23px;
+    padding-left: 5px
+}
+ul,
+ol {
+    list-style-type: none
+}
+#channels-wrapper {
+    position: fixed;
+    left: 0%;
+    width: 25%;
+    background-color: #efefef;
+    overflow: scroll;
+    height: 60%;
+    border-right: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    z-index: 2
+}
+#channels-wrapper h2 {
+    border-bottom: 1px solid #bcbcbc
+}
+#channels-wrapper .channel {
+    border-bottom: 1px solid #bcbcbc;
+    border-top: 1px solid #fff;
+    box-shadow: 0px -1px 3px #ccc;
+    position: relative;
+    height: 17px
+}
+#channels-wrapper .channel .name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 10px;
+    color: #333;
+    position: absolute;
+    top: 3px;
+    padding-left: 5px;
+    left: 0px;
+    z-index: 5;
+    width: 100%;
+    padding-right: 61px;
+    box-sizing: border-box
+}
+#channels-wrapper .channel .sparky {
+    position: absolute;
+    bottom: 1px;
+    height: 15px;
+    right: 1px
+}
+#channels-wrapper .channel:hover {
+    cursor: pointer
+}
+#channels-wrapper .channel:hover .name {
+    text-decoration: underline
+}
+#channels-wrapper .channel.active {
+    background-color: #E2E2E2;
+    color: #000
+}
+.lines {
+    position: fixed;
+    border-bottom: 1px solid #bcbcbc;
+    left: 25%;
+    width: 75%;
+    top: 23px;
+    word-wrap: break-word;
+    overflow-y: scroll;
+    font-size: 12px;
+    font-family: "Droid Sans Mono"
+}
+.lines li {
+    padding: 4px;
+    border-bottom: 1px solid #efefef;
+    position: relative;
+    white-space: pre
+}
+.lines li .notes {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    font-size: 10px;
+    color: #ccc
+}
+.lines li .notes:before {
+    margin-right: 4px;
+    font-size: 9px
+}
+.lines li.publish .notes:before {
+    content: "Publish";
+    color: #a91c23
+}
+.lines li.subscribe .notes:before {
+    content: "Subscribe";
+    color: #3394bf
+}
+.lines li.history .notes:before {
+    content: "History";
+    color: #ddd
+}
+.lines li.presence .notes:before {
+    content: "Presence";
+    color: #ddd
+}
+.tools {
+    position: fixed;
+    top: 0px;
+    border-bottom: 1px solid #bcbcbc;
+    background-color: #efefef;
+    font-size: 12px;
+    height: 22px;
+    line-height: 23px;
+    width: 75%;
+    left: 25%
+}
+.tools .tool {
+    display: inline-block;
+    margin-left: 8px;
+    margin-right: 12px;
+    font-size: 10px
+}
+.tools .tool i {
+    margin-right: 5px
+}
+.tools .tool.disabled {
+    color: #ccc
+}
+.tools a.tool {
+    text-decoration: none
+}
+.tools a.tool:hover {
+    text-decoration: underline
+}
+.tools .tool.disabled:hover {
+    text-decoration: none;
+    cursor: initial
+}
+.json-key {
+    color: #111
+}
+.json-value {
+    color: #a91c23
+}
+.json-string {
+    color: #3394bf
+}
+.hide {
+    display: none
+}
+.show {
+    display: block
+}
+img {
+    max-width: 100%
+}
+.bot {
+    line-height: 23px;
+    display: inline-block;
+    position: fixed;
+    margin-left: 8px;
+    margin-right: 12px;
+    font-size: 10px;
+    right: 6px;
+    text-decoration: none
+}
+.bot:hover {
+    text-decoration: underline
+}
+#off {
+    position: absolute;
+    border-bottom: 1px solid #bcbcbc;
+    width: 100%;
+    height: 60%;
+    background-color: white;
+    z-index: 100
+}
+#off .message {
+    height: 35px;
+    line-height: 35px;
+    color: #222;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    font-family: "Lucida Grande", sans-serif
+}
+#loading {
+    position: absolute;
+    top: 50%;
+    margin-top: -40px;
+    width: 80px;
+    height: 80px;
+    left: 50%;
+    margin-left: -40px
+}
+#loading img {
+    float: left;
+    margin-right: 5px
+}
+.tabs {
+    position: fixed;
+    bottom: 0;
+    height: 40%;
+    width: 25%;
+    background: #efefef;
+    display: inline-block
+}
+.tab-links:after {
+    display: block;
+    clear: both;
+    content: ''
+}
+.tab-links li {
+    float: left;
+    list-style: none
+}
+.tab-links a {
+    padding: 4.5px 2px;
+    display: inline-block;
+    background: #efefef;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4c4c4c;
+    text-decoration: none;
+    transition: all linear 0.15s
+}
+.tab-links a:hover {
+    background: #a7cce5;
+    text-decoration: none
+}
+li.active a,
+li.active a:hover {
+    background: #fff;
+    color: #4c4c4c
+}
+.tab-content {
+    background-color: #efefef;
+    border-right: 1px solid #bcbcbc;
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    padding-left: 5px;
+    padding-right: 5px;
+    line-height: 22px;
+    overflow-y: scroll;
+    width: calc(100% - 10px);
+    height: calc(100% - 55px)
+}
+.tabs-list {
+    width: 80%
+}
+input {
+    display: inline-block;
+    padding: 2px;
+    width: 60px
+}
+statistics {
+    position: relative;
+    left: 10px;
+    width: 20px
+}
+#bot-excluded-cards input {
+    width: 28px
+}
+label {
+    display: inline-block;
+    width: calc(100% - 65px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    float: left;
+    margin-right: 5px
+}
+.select-resolution {
+    height: 55px
+}
+#options p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip
+}
+#reset {
+    height: 40px;
+    text-align: center;
+    margin-top: 20px
+}
+.tab {
+    display: none
+}
+.tab.active {
+    display: block
+}
+#info {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    height: 30px;
+    width: 25%;
+    border-right: 1px solid #bcbcbc;
+    border-top: 1px solid #bcbcbc
+}
+#info button {
+    height: 100%;
+    width: 100%
+}
+#start-button {
+    position: fixed;
+    height: 30px;
+    width: 6.25%
+}
+#stop-button {
+    position: fixed;
+    height: 30px;
+    width: 6.25%;
+    left: 6.25%
+}
+#bot_stop {
+    left: 50%
+}
+#info-labels {
+    position: relative;
+    margin-left: 5px;
+    width: 50%;
+    left: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip
+}
+#info-timer {
+    height: 50%;
+    font-size: 12
+}
+#info-medals {
+    bottom: 0;
+    height: 50%;
+    font-size: 12
+}
+h3 {
+    width: 100%;
+    position: fixed;
+    border-left: 1px solid #bcbcbc;
+    border-top: 1px solid #bcbcbc;
+    border-bottom: 1px solid #bcbcbc;
+    display: block;
+    height: 22px;
+    line-height: 23px;
+    padding-left: 5px;
+    background-color: #efefef
+}
+#game-log {
+    position: fixed;
+    border-bottom: 1px solid #ddd;
+    left: 25%;
+    width: 75%;
+    top: 60%;
+    height: 40%
+}
+.log {
+    position: fixed;
+    border-bottom: 1px solid #bcbcbc;
+    left: 25%;
+    width: 75%;
+    top: calc(60% + 23px);
+    height: calc(40% - 23px);
+    word-wrap: break-word;
+    overflow-y: scroll;
+    font-size: 12px;
+    font-family: "Droid Sans Mono"
+}
+.log li {
+    padding: 4px;
+    border-bottom: 1px solid #efefef;
+    position: relative;
+    white-space: pre
+}
+.log li .notes {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    font-size: 10px;
+    color: #ccc
+}
