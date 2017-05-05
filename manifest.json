@@ -1,11 +1,14 @@
 {
-   "browser_action": {
-      "default_title": "Granblue DPS Meter"
-   },
-   "description": "For elitist faggots.",
-   "devtools_page": "panel.html",
-   "manifest_version": 2,
-   "name": "Granblue DPS Meter",
-   "permissions": [ "tabs" ],
-   "version": "0.1.5"
+	"browser_action": {
+		"default_title": "Granblue DPS Meter"
+	},
+	"description": "For elitist faggots.",
+	"background": {
+		"page": "background.html"
+	},
+	"devtools_page": "panel.html",
+	"manifest_version": 2,
+	"name": "Granblue DPS Meter",
+	"permissions": [ "tabs" ],
+	"version": "0.1.7"
 }
