@@ -1,14 +1,18 @@
 {
-	"browser_action": {
-		"default_title": "Granblue DPS Meter"
-	},
-	"description": "For elitist faggots.",
-	"background": {
-		"page": "background.html"
-	},
-	"devtools_page": "panel.html",
-	"manifest_version": 2,
-	"name": "Granblue DPS Meter",
-	"permissions": [ "tabs" ],
-	"version": "0.1.7"
+  "browser_action": {
+    "default_title": "Granblue DPS Meter",
+    "default_popup": "popup.html"
+  },
+  "description": "For elitist faggots.",
+  "background": {
+    "scripts": [
+      "event.js"
+    ],
+    "persistent": true
+  },
+  "devtools_page": "panel.html",
+  "manifest_version": 2,
+  "name": "Granblue DPS Meter",
+  "permissions": [ "tabs" ],
+  "version": "0.1.7"
 }
