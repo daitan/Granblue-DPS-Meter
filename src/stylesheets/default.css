@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -7880,13 +7880,126 @@ body {
 }
 
 #contents {
-  position: absolute;
-  width: 400px;
-  bottom: 3px;
-  top: 3px;
-  left: 3px;
-  right: 3px;
-  background-color: #9fbede;
+  display: block;
+  width: 100%;
+}
+
+@mixin circle-icon($color) {
+  @extend .img-circle;
+  position: relative;
+  margin-left: 5px;
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  background-color: $color;
+}
+
+.history {
+  float: left;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  overflow: hidden;
+  width: 30%;
+  border-radius: 10px 0 0 10px;
+  background: #555;
+}
+
+  .history li {
+    border-bottom: 1px solid #000;
+    margin-bottom: 1px;
+    text-align: left;
+    padding: 0px;
+  }
+
+#contents li:last-child {
+  margin-bottom: 0px;
+  border-bottom: 0px;
+}
+
+#contents li a {
+  display: block;
+  font-size: 14pt;
+  color: #fff;
+  text-decoration: none;
+  padding: 7%;
+  background: #57cac9;
+  background: -webkit-linear-gradient(top, #444, #333);
+  background: -moz-linear-gradient(top, #444, #333);
+}
+
+  #contents li a.selected {
+    background: #fff;
+    color: #000;
+  }
+
+.parser-container {
+  display: block;
+  background: #fff;
+  width: 80%;
+  min-height: 500px;
+}
+
+#contents div .battle-data {
+  display: none;
+  margin: 0px;
+  color: #555;
+  padding: 10px 3% 3% 3%;
+}
+
+  #contents div div p {
+    margin: 0px 0px 20px 0px;
+  }
+
+@media screen and (max-width: 781px) {
+  .parser-container {
+    display: block;
+    margin: 0 auto;
+    width: 95%;
+    border-top: none;
+    border-radius: 0;
+    box-shadow: 0px 0px 10px black;
+  }
+
+  .d_active {
+    background: #fff;
+  }
+}
+
+.history {
+  display: none;
+}
+
+.parser-drawer-heading {
+  margin: 0;
+  font-size: 14pt;
+  color: #fff;
+  text-decoration: none;
+  padding: 3%;
+  background: #57cac9;
+  background: -webkit-linear-gradient(top, #444, #333);
+  background: -moz-linear-gradient(top, #444, #333);
+}
+
+@media screen and (min-width: 480px) {
+  .parser-container {
+    float: left;
+    padding: 10px 3% 3% 3%;
+    border-radius: 0 10px 10px 0;
+    width: 64%;
+  }
+
+  .history {
+    display: block;
+  }
+
+  .parser-drawer-heading {
+    display: none;
+  }
+
+  div {
+    padding: 0;
+  }
 }
 
 .vertical-table, .vertical-table-small {

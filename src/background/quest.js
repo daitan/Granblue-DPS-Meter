@@ -418,6 +418,7 @@
             case "contribution":
               break;
             case "win":
+              stopRaidTimer(id);
               break;
             // attack handler
             case "attack":
@@ -436,9 +437,6 @@
                 }
                 isAttack = true;
                 isDamage = true;
-                //start_timer();
-              } else {
-                //console.log("Undefined damage variable in attack scenario: \n" + json.scenario[i]);
               }
               break;
             // ougi and summon handler
@@ -466,8 +464,6 @@
                   isAttack = true;
                   //start_timer();
                 }
-              } else {
-                //console.log("Undefined damage variable in ougi scenario: \n" + json.scenario[i]);
               }
               break;
             // ability and other damage handler
@@ -484,12 +480,9 @@
                   currQuest.ttlDmg      += json.scenario[i].list[j].value;
                 }
                 isDamage = true;
-              } else {
-                //console.log("Undefined damage variable in scenario: \n" + json.scenario[i]);
               }
               break;
             default:
-              //console.log("Unhandled scenario command: " + json.scenario[i].cmd);
               break;
           }
         }
@@ -518,24 +511,14 @@
 
     Attack: function(json) {
     },
-
-    //CopyTweet: function(json) {
-    //  if (Options.Get('copyJapaneseName') && json.tweet_mode === 0 && json.twitter.forced_message !== undefined) {
-    //    var start = json.twitter.forced_message.indexOf('\n');
-    //    var end   = json.twitter.forced_message.lastIndexOf('\n');
-    //    if (start !== -1 && end !== -1) {
-    //      var english = json.twitter.forced_message.substring(start + 1, end);
-    //      console.log(english);
-    //      if (tweetHash[english] !== undefined) {
-    //        copy(tweetHash[english]);
-    //      }
-    //    }
-    //  }
-    //}
+    
   };
 
   var processTime = function (id) {
-    if (raids[id] === undefined || raids[id].spTime !== null) {
+    if (raids[id] === undefined) {
+      if (raidTimers[id] === undefined) {
+        return;
+      }
       clearInterval(raidTimers[id]);
       return;
     }
@@ -545,7 +528,8 @@
       isStart = true;
     }
     if (!isStart) {
-      raids[id].time += 100;
+      var currTime = new Date().getTime();
+      raids[id].time = currTime - raids[id].stTime;
       var secs = raids[id].time / 1000.0;
       if (raids[id].time > 0) {
         raids[id].ttlDps = raids[id].ttlDmg / secs;
@@ -573,6 +557,36 @@
       return;
     }
     raidTimers[id] = setInterval(processTime, 100, id);
+  };
+
+  var stopRaidTimer = function (id) {
+    if (raids[id] === undefined || raids[id].stTime === null) {
+      if (raidTimers[id] === undefined) {
+        return;
+      }
+      clearInterval(raidTimers[id]);
+      return;
+    }
+    raids[id].spTime = new Date().getTime();
+    raids[id].time = raids[id].spTime - raids[id].stTime;
+    var secs = raids[id].time / 1000.0;
+    if (raids[id].time > 0) {
+      raids[id].ttlDps = raids[id].ttlDmg / secs;
+      Message.PostAll({
+        'setText': {
+          'id': '#total-dps',
+          'value': 'Total dps: ' + raids[id].ttlDps
+        }
+      });
+      var minutes = secs / 60 | 0;
+      secs = ((secs * 1000) % 60000) / 1000;
+      Message.PostAll({
+        'setText': {
+          'id': '#total-time',
+          'value': 'Time: ' + minutes + ":" + secs
+        }
+      });
+    }
   };
 
   var setQuestsJQuery = function() {
@@ -812,16 +826,6 @@
 
   var parseQuestID = function(url) {
     return url.substring(url.indexOf('data/') + 5, url.lastIndexOf('/'));
-  };
-
-  var copy =  function(str) {
-    var input = document.createElement('textarea');
-    document.body.appendChild(input);
-    input.value = str;
-    input.focus();
-    input.select();
-    document.execCommand('Copy');
-    input.remove();
   };
 
 })();
