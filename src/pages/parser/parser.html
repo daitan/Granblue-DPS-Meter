@@ -1,8 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
+
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link id="pagestyle" href="../../stylesheets/default.css" rel="stylesheet">
+ <!--    <link id="pagestyle"  type="text/css" href="../../stylesheets/flatly.css" rel="stylesheet"> -->
+    <link href="../../../lib/bootstrap-4.2-dist/css/bootstrap.min.css"  rel="stylesheet" type="text/css"></script>
+<!--     <script type="text/javascript" src="../../../lib/bootstrap-sass-3.3.7/assets/javascripts/bootstrap.js"></script> -->
+    <script type="text/javascript" src="../../../lib/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../../lib/popper.js"></script>    
+    <script src="../../../lib/bootstrap-4.2-dist/js/bootstrap.min.js"></script>
   </head>
   <body>
     <!--
@@ -22,7 +28,7 @@
       </div>
     </div>
     -->
-    <div id="contents">
+<!--     <div id="contents">
       <div class="parser-container">
         <h3 class="parser-drawer-heading battle1" rel="tab1">Battle 1</h3>
         <div class="battle-data" id="battle1">
@@ -91,10 +97,26 @@
         <li><a rel="battle3" href="#">Battle 3</a></li>
         <li><a rel="battle4" href="#">Battle 4</a></li>
       </ul>
-    </div>
+    </div> -->
 
-    <script type="text/javascript" src="../../../lib/jquery-3.0.0.min.js"></script>
-    <script type="text/javascript" src="../../../lib/bootstrap-sass-3.3.7/assets/javascripts/bootstrap.min.js"></script>
-    <script type="text/javascript" src="message.js"></script>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#parse">Parse</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#logs">Parse Logs</a>
+  </li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="parse">
+    <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+  </div>
+  <div class="tab-pane fade" id="logs">
+    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+  </div>
+</div>
+
+
+<!--     <script type="text/javascript" src="message.js"></script> -->
   </body>
 </html>
