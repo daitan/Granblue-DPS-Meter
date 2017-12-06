@@ -10,7 +10,23 @@
   var sortedSupplies = [];
   var imageURL       = '../../assets/images/';
   var themeName      = '';
+  var currentRaids   = [];
   
+  var questTemplate   = null;
+  var historyTemplate = $.parseHTML('<li><a rel="quest-1" href="#">Battle 1</a></li>');
+
+  $.ajax({
+    url: './questtemplate.html',
+    async: false,
+    success: function (result) {
+      questTemplate = $.parseHTML(result);
+    }
+  })
+  console.log(questTemplate);
+
+  var $parserContainer  = $('.parser-container');
+  var $historyContainer = $('.history');
+
   $('.tooltip-down').tooltip();
   
   $('#time-zone').click(function() {
@@ -61,7 +77,8 @@
           } else if (msg.hideObject) {
             hideObject(msg.hideObject.id, msg.hideObject.value);
           } else if (msg.addQuest) {
-            addQuest(msg.addQuest.id, msg.addQuest.url, msg.addQuest.name, msg.addQuest.amount, msg.addQuest.max, msg.addQuest.animeIDs, msg.addQuest.animeAmounts);
+            //addQuest(msg.addQuest.id, msg.addQuest.url, msg.addQuest.name, msg.addQuest.amount, msg.addQuest.max, msg.addQuest.animeIDs, msg.addQuest.animeAmounts);
+            addQuest(message.addQuest.id);
           } else if (msg.addDistinction) {
             addDistinction(msg.addDistinction.id, msg.addDistinction.amount, msg.addDistinction.max, msg.addDistinction.isEnabled);
           } else if (msg.collapsePanel) {
@@ -135,7 +152,8 @@
       return;
     }
     if (message.addQuest) {
-      addQuest(message.addQuest.id, message.addQuest.url, message.addQuest.name, message.addQuest.amount, message.addQuest.max, message.addQuest.animeIDs, message.addQuest.animeAmounts);
+      //addQuest(message.addQuest.id, message.addQuest.url, message.addQuest.name, message.addQuest.amount, message.addQuest.max, message.addQuest.animeIDs, message.addQuest.animeAmounts);
+      addQuest(message.addQuest.id);
       return;
     }
     if (message.addDistinction) {
@@ -299,57 +317,31 @@
     }
     return value;
   };
+  //function (id, imgUrl, name, amount, max, animeIDs, animeAmounts)
 
-  var addQuest = function(id, imgUrl, name, amount, max, animeIDs, animeAmounts) {
-    var newRaid;
-    if (animeIDs !== null && animeIDs.length > 1) {
-      newRaid = $dailyRaidBig.clone();
-      newRaid.find('.open-url').each(function(i) {
-        $(this).click(function() {
-          Message.Post({'openURL': url + '#quest/supporter/' + id + '/1/0/' + animeIDs[i]});
-        });
-      });
-    } else {
-      newRaid = $dailyRaid.clone();
-      var raidUrl = url + '#quest/supporter/' + id + '/1';
-      if (animeIDs !== null) {
-        raidUrl += '/0/' + animeIDs[0];
+  var recursiveEachAppendID = function(element, id) {
+    $(element).children().each(function () {
+      var tempID = $(this).attr('id');
+      if (tempID !== undefined) {
+        $(this).attr('id', tempID + id);
       }
-      newRaid.click(function() {
-        Message.Post({'openURL': raidUrl});
-      });
-    }
-    newRaid.data('id', id);
-    newRaid.attr('id', 'daily-raid-' + id);
-    newRaid.find('.quest-img').first().attr('src', imgUrl);
-    newRaid.find('.quest-name').first().text(name);
-    newRaid.find('.quest-count').first().attr('id', 'remaining-' + id);
-    newRaid.find('.quest-count').first().data('id', id);
-    newRaid.find('.quest-count').first().text(amount + '/' + max);
-    if (animeIDs !== null) {
-      newRaid.find('.item-img').each(function(i) {
-        $(this).attr('src', imageURL + 'items/' + animeIDs[i] + '.jpg');
-      });
-      newRaid.find('.item-count').each(function(i) {
-        $(this).text(animeAmounts[i]);
-        $(this).addClass('anime-count-' + animeIDs[i]);
-      });
-    } else {
-      newRaid.children('.quest-item').first().remove();
-    }
-    $dailyRaidList.append(newRaid);
-  };
-  var addDistinction = function(id, amount, max, isEnabled) {
-    var newDistinction = $dailyDistinction.clone();
-    newDistinction.data('id', id);
-    newDistinction.attr('id', 'distinctions-body-' + id);
-    newDistinction.find('.item-img').first().attr('src', imageURL + 'items/' + id + '.jpg');
-    newDistinction.find('.item-count').first().attr('id', 'dailies-distinctions-' + id);
+      recursiveEachAppendID(this, id);
+    });
+  }
 
-    $dailyDistinctionList.append(newDistinction);
-    if (!isEnabled) {
-      newDistinction.hide();
-    }
+  var addQuest = function (id) {
+    currentRaids.push(id);
+    var newRaid = $(questTemplate).clone();
+    var newRaidTab = $(historyTemplate).clone();
+    
+    $(newRaid[0]).attr('id', 'quest-' + id);
+    $(newRaid[2]).attr('id', 'quest-' + id);
+    recursiveEachAppendID(newRaid[2], id);
+    console.log(newRaid);
+    $(newRaidTab[0]).attr('rel', 'quest-' + id);
+
+    $parserContainer.prepend(newRaid);
+    $historyContainer.prepend(newRaidTab);
   };
 
   var addQuestCharacter = function(index) {
@@ -450,8 +442,8 @@
         $(e.target).addClass("selected");
         
         var clicked_index = $("a", this).index(e.target);
-        $('#contents > div > .battle-data').css('display', 'none');
-        $('#contents > div > .battle-data').eq(clicked_index).fadeIn();
+        $('#contents > div > .quest-data').css('display', 'none');
+        $('#contents > div > .quest-data').eq(clicked_index).fadeIn();
       }
 
       $(this).blur();
@@ -460,7 +452,7 @@
 
     $(".parser-drawer-heading").click(function () {
 
-      $(".battle-data").hide();
+      $(".quest-data").hide();
       var d_activeTab = $(this).attr("rel");
       $("#" + d_activeTab).fadeIn();
 

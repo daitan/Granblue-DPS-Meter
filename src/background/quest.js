@@ -231,6 +231,52 @@
     return str;
   };
 
+  /**
+     * Decimal adjustment of a number.
+     *
+     * @param   {String}    type    The type of adjustment.
+     * @param   {Number}    value   The number.
+     * @param   {Integer}   exp     The exponent (the 10 logarithm of the adjustment base).
+     * @returns {Number}            The adjusted value.
+     */
+  var decimalAdjust = function(type, value, exp) {
+    // If the exp is undefined or zero...
+    if (typeof exp === 'undefined' || +exp === 0) {
+      return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // If the value is not a number or the exp is not an integer...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+      return NaN;
+    }
+    // Shift
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Shift back
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+  }
+
+  // Decimal round
+  if (!Math.round10) {
+    Math.round10 = function (value, exp) {
+      return decimalAdjust('round', value, exp);
+    };
+  }
+  // Decimal floor
+  if (!Math.floor10) {
+    Math.floor10 = function (value, exp) {
+      return decimalAdjust('floor', value, exp);
+    };
+  }
+  // Decimal ceil
+  if (!Math.ceil10) {
+    Math.ceil10 = function (value, exp) {
+      return decimalAdjust('ceil', value, exp);
+    };
+  }
+
   window.Quest = {
     Initialize: function(callback) {
       Storage.GetMultiple(['quests'], function(response) {
@@ -335,17 +381,6 @@
       
     },
 
-    CreateQuest: function(json, devID) {
-      if (json.result !== false && json.is_host === false) {
-        var id = '' + json.raid_id;
-        if (raids[id] !== undefined) {
-          return;
-        }
-        raids[id] = createQuest(id, devID);
-        setQuestsJQuery();
-      }
-    },
-
     StartBattle: function (json, devID) {
       json = tryParseJson(json);
       var id = '' + json.raid_id;
@@ -354,10 +389,10 @@
         // do nothing for now
       }
 
-      var exists = false;
       var image = enemyImageURL + json.boss.param[0].cjs.substring(json.boss.param[0].cjs.lastIndexOf('_') + 1) + '.png';
       if (raids[id] === undefined) {
         raids[id] = createQuest(id, devID);
+        addQuestsJQuery(raids[id]);
       }
         currQuest = raids[id];
         currQuest.image = image;
@@ -392,6 +427,7 @@
         var isFromPlayer    = false;
         var isSummon        = false;
         var isAttack        = false;
+        var isWin           = false;
 
         for (var i = 0; i < json.scenario.length; i++) {
           //ignore enemy json
@@ -418,7 +454,7 @@
             case "contribution":
               break;
             case "win":
-              stopRaidTimer(id);
+              isWin = true;
               break;
             // attack handler
             case "attack":
@@ -499,6 +535,9 @@
         }
 
         startRaidTimer(id);
+        if (isWin) {
+          stopRaidTimer(id);
+        }
         setBattleJQuery(currQuest);
         if (isAttack) {
           currQuest.prevTurnDmg = 0;
@@ -535,16 +574,16 @@
         raids[id].ttlDps = raids[id].ttlDmg / secs;
         Message.PostAll({
           'setText': {
-            'id': '#total-dps',
-            'value': 'Total dps: ' + raids[id].ttlDps
+            'id': '#total-dps-' + id,
+            'value': 'Total dps: ' + Math.round10(raids[id].ttlDps, -2)
           }
         });
         var minutes = secs / 60 | 0;
         secs = ((secs * 1000) % 60000) / 1000;
         Message.PostAll({
           'setText': {
-            'id': '#total-time',
-            'value': 'Time: ' + minutes + ":" + secs
+            'id': '#total-time-' + id,
+            'value': 'Time: ' + minutes + ":" + Math.round10(secs, -1)
           }
         });
       }
@@ -567,6 +606,7 @@
       clearInterval(raidTimers[id]);
       return;
     }
+    clearInterval(raidTimers[id]);
     raids[id].spTime = new Date().getTime();
     raids[id].time = raids[id].spTime - raids[id].stTime;
     var secs = raids[id].time / 1000.0;
@@ -574,16 +614,16 @@
       raids[id].ttlDps = raids[id].ttlDmg / secs;
       Message.PostAll({
         'setText': {
-          'id': '#total-dps',
-          'value': 'Total dps: ' + raids[id].ttlDps
+          'id': '#total-dps-' + id,
+          'value': 'Total dps: ' + Math.round10(raids[id].ttlDps, -2)
         }
       });
       var minutes = secs / 60 | 0;
       secs = ((secs * 1000) % 60000) / 1000;
       Message.PostAll({
         'setText': {
-          'id': '#total-time',
-          'value': 'Time: ' + minutes + ":" + secs
+          'id': '#total-time-' + id,
+          'value': 'Time: ' + minutes + ":" + Math.round10(secs, -1)
         }
       });
     }
@@ -614,102 +654,111 @@
     //  }});
     //}
   };
+
+  var addQuestsJQuery = function (currQuest) {
+    console.log(currQuest.id);
+    Message.PostAll({
+      'addQuest': {
+        'id': currQuest.id
+      }
+    });
+
+    //for (var i = 0; i < 4; i++) {
+    //  if (i < raids.length) {
+    //    image = raids[i].image;
+    //  } else {
+    //    image = blankIcon;
+    //  }
+    //  Message.PostAll({'setImage': {
+    //    'id': '#quest-image-' + i,
+    //    'value': image
+    //  }});
+    //}
+  };
   
   var setBattleJQuery = function(currQuest) {
     console.log(currQuest);
     if (currQuest.stTime === null) {
       Message.PostAll({
         'setText': {
-          'id': '#total-time',
+          'id': '#total-time-' + currQuest.id,
           'value': 'Time: 0.0'
         }
       });
     }
     if (currQuest.ttlTurns !== null) {
       Message.PostAll({'setText': {
-          'id': '#total-turns',
+          'id': '#total-turns-' + currQuest.id,
           'value': 'Turns: ' + currQuest.ttlTurns
         }});
     } else {
       Message.PostAll({'setText': {
-          'id': '#total-turns',
-          'value': 'Turns: 0'
-        }
-      });
-    }
-    if (currQuest.ttlTurns !== null) {
-      Message.PostAll({'setText': {
-          'id': '#total-turns',
-          'value': 'Turns: ' + currQuest.ttlTurns
-        }});
-    } else {
-      Message.PostAll({'setText': {
-          'id': '#total-turns',
+          'id': '#total-turns-' + currQuest.id,
           'value': 'Turns: 0'
         }
       });
     }
     if (currQuest.ttlDmg !== null) {
       Message.PostAll({'setText': {
-          'id': '#total-damage',
+          'id': '#total-damage-' + currQuest.id,
           'value': 'Total damage: ' + currQuest.ttlDmg
         }
       });
     } else {
       Message.PostAll({'setText': {
-          'id': '#total-damage',
+          'id': '#total-damage-' + currQuest.id,
           'value': 'Total damage: 0'
         }
       });
     }
     if (currQuest.ttlDps !== null) {
       Message.PostAll({'setText': {
-          'id': '#total-dps',
-          'value': 'Total dps: ' + currQuest.ttlDps
+          'id': '#total-dps-' + currQuest.id,
+          'value': 'Total dps: ' + Math.round10(raids[id].ttlDps, -2)
         }
       });
     } else {
       Message.PostAll({'setText': {
-          'id': '#total-dps',
+          'id': '#total-dps-' + currQuest.id,
           'value': 'Total dps: 0'
         }
       });
     }
     if (currQuest.ttlDpt !== null) {
       Message.PostAll({'setText': {
-          'id': '#total-dpt',
-          'value': 'Total dpt: ' + currQuest.ttlDpt
+          'id': '#total-dpt-' + currQuest.id,
+          'value': 'Total dpt: ' + Math.round10(raids[id].ttlDpt, -2)
         }
       });
     } else {
       Message.PostAll({'setText': {
-          'id': '#total-dpt',
+          'id': '#total-dpt-' + currQuest.id,
           'value': 'Total dpt: 0'
         }
       });
     }
     if (currQuest.prevTurnDmg !== null) {
       Message.PostAll({'setText': {
-          'id': '#avg-turn-dmg',
+          'id': '#avg-turn-dmg-' + currQuest.id,
           'value': 'Previous turn damage: ' + currQuest.prevTurnDmg
         }
       });
     } else {
       Message.PostAll({'setText': {
-          'id': '#avg-turn-dmg',
+          'id': '#avg-turn-dmg-' + currQuest.id,
           'value': 'Previous turn damage: 0'
         }
       });
     }
     if (currQuest.maxTurnDmg !== null) {
       Message.PostAll({'setText': {
-          'id': '#highest-turn-dmg',
+          'id': '#highest-turn-dmg-' + currQuest.id,
           'value': 'Highest turn damage: ' + currQuest.maxTurnDmg
         }
       });
     } else {
       Message.PostAll({'setText': {
-          'id': '#highest-turn-dmg',
+          'id': '#highest-turn-dmg-' + currQuest.id,
           'value': 'Highest turn damage: 0'
         }
       });
