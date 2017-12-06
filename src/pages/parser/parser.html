@@ -3,9 +3,9 @@
 
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <!--    <link id="pagestyle"  type="text/css" href="../../stylesheets/flatly.css" rel="stylesheet"> -->
-    <link href="../../../lib/bootstrap-4.2-dist/css/bootstrap.min.css"  rel="stylesheet" type="text/css"></script>
-<!--     <script type="text/javascript" src="../../../lib/bootstrap-sass-3.3.7/assets/javascripts/bootstrap.js"></script> -->
+    <!--CSS changes should be done in src/stylesheet -->
+    <link id="pagestyle" href="../../stylesheets/default.css"  rel="stylesheet" type="text/css">
+    <!-- Scripts should be placed in lib -->
     <script type="text/javascript" src="../../../lib/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../../../lib/popper.js"></script>    
     <script src="../../../lib/bootstrap-4.2-dist/js/bootstrap.min.js"></script>
@@ -28,95 +28,54 @@
       </div>
     </div>
     -->
-<!--     <div id="contents">
-      <div class="parser-container">
-        <h3 class="parser-drawer-heading battle1" rel="tab1">Battle 1</h3>
-        <div class="battle-data" id="battle1">
-          <h2>Battle 1</h2>
-          <div class="totals-container">
-            <div id="totals">
-              <div id="total-time" class="number">Time:</div>
-              <div id="total-turns" class="number">Turns:</div>
-              <div id="total-damage" class="number">Total damage:</div>
-              <div id="total-dps" class="number">Total dps:</div>
-              <div id="total-dpt" class="number">Total dpt:</div>
-              <div id="avg-turn-dmg" class="number">Average turn damage:</div>
-              <div id="highest-turn-dmg" class="number">Highest turn damage:</div>
-            </div>
-          </div>
-        </div>
-        <h3 class="parser-drawer-heading battle2" rel="tab2">Battle 2</h3>
-        <div class="battle-data" id="battle2">
-          <h2>Battle 2</h2>
-          <div class="totals-container">
-            <div id="totals">
-              <div id="total-time" class="number">Time:</div>
-              <div id="total-turns" class="number">Turns:</div>
-              <div id="total-damage" class="number">Total damage:</div>
-              <div id="total-dps" class="number">Total dps:</div>
-              <div id="total-dpt" class="number">Total dpt:</div>
-              <div id="avg-turn-dmg" class="number">Average turn damage:</div>
-              <div id="highest-turn-dmg" class="number">Highest turn damage:</div>
-            </div>
-          </div>
-        </div>
-        <h3 class="parser-drawer-heading battle3" rel="tab3">Battle 3</h3>
-        <div class="battle-data" id="battle3">
-          <h2>Battle 3</h2>
-          <div class="totals-container">
-            <div id="totals">
-              <div id="total-time" class="number">Time:</div>
-              <div id="total-turns" class="number">Turns:</div>
-              <div id="total-damage" class="number">Total damage:</div>
-              <div id="total-dps" class="number">Total dps:</div>
-              <div id="total-dpt" class="number">Total dpt:</div>
-              <div id="avg-turn-dmg" class="number">Average turn damage:</div>
-              <div id="highest-turn-dmg" class="number">Highest turn damage:</div>
-            </div>
-          </div>
-        </div>
-        <h3 class="parser-drawer-heading battle4" rel="tab4">Battle 4</h3>
-        <div class="battle-data" id="battle4">
-          <h2>Battle 4</h2>
-          <div class="totals-container">
-            <div id="totals">
-              <div id="total-time" class="number">Time:</div>
-              <div id="total-turns" class="number">Turns:</div>
-              <div id="total-damage" class="number">Total damage:</div>
-              <div id="total-dps" class="number">Total dps:</div>
-              <div id="total-dpt" class="number">Total dpt:</div>
-              <div id="avg-turn-dmg" class="number">Average turn damage:</div>
-              <div id="highest-turn-dmg" class="number">Highest turn damage:</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <ul class="history">
-        <li><a rel="battle1" href="#">Battle 1</a></li>
-        <li><a rel="battle2" href="#">Battle 2</a></li>
-        <li><a rel="battle3" href="#">Battle 3</a></li>
-        <li><a rel="battle4" href="#">Battle 4</a></li>
-      </ul>
-    </div> -->
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#parse">Parse</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#logs">Parse Logs</a>
+    </li>
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active in" id="parse">
+      <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro.</p>
+      <button type="button" class="btn btn-outline-primary">Record</button> 
+      <button type="button" class="btn btn-outline-primary">Stop</button>
+    </div>
 
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" data-toggle="tab" href="#parse">Parse</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#logs">Parse Logs</a>
-  </li>
-</ul>
-<div id="myTabContent" class="tab-content">
-  <div class="tab-pane fade active in" id="parse">
-    <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+    <div class="tab-pane fade" id="logs">
+      <table class="table table-striped table-hover table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th>#</th>
+            <th>Time</th>
+            <th>Turns</th>
+            <th>Total damage</th>
+            <th>Total dps</th>
+            <th>Total dpt</th>
+            <th>Average turn damage</th>
+            <th>Highest turn damage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Column content</td>
+            <td>Column content</td>
+            <td>Column content</td>
+          </tr>
+          <tr class="table-active">
+            <td>2</td>
+            <td>Column content</td>
+            <td>Column content</td>
+            <td>Column content</td>
+          </tr>
+        </tbody>
+      </table> 
+    </div>
   </div>
-  <div class="tab-pane fade" id="logs">
-    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
-  </div>
-</div>
 
 
-<!--     <script type="text/javascript" src="message.js"></script> -->
+    <script type="text/javascript" src="message.js"></script>
   </body>
 </html>
