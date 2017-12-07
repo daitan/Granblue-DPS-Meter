@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  //Adds parse results from parse.html after clicking stop button.
   $("#stop").click(function(e){
     var num = 3;
     var time = "hi";

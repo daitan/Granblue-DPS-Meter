@@ -5,11 +5,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!--CSS changes should be done in src/stylesheet -->
     <link id="pagestyle" href="../../stylesheets/default.css"  rel="stylesheet" type="text/css">
-    <!-- Scripts should be placed in lib -->
-    <script type="text/javascript" src="../../../lib/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="../../../lib/popper.js"></script>    
-    <script src="../../../lib/bootstrap-4.2-dist/js/bootstrap.min.js"></script>
-    <script src="../../javascript/stop.js"></script>
   </head>
   <body>
     <!--
@@ -39,9 +34,20 @@
   </ul>
   <div id="myTabContent" class="tab-content">
     <div class="tab-pane fade active in" id="parse">
-      <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro.</p>
-      <button id="record" type="button" class="btn btn-outline-primary">Record</button> 
-      <button id="stop" type="button" class="btn btn-outline-primary">Stop</button>
+      <div class="parseWindow"> 
+        <h1> Total DPS: </h1>
+        <h1> Time: </h1>        
+        <div><label>Total DPS:</label><div class="data totaldps">0</div></div>
+        <div><label>Total damage:</label><div class="data totaldmg">0</div></div>
+        <div><label>Total damage per turn:</label><div class="data totaldpt">0</div></div>
+        <div><label>Total turns:</label><div class="data totalturns">0</div></div>
+        <div><label>Damage last turn:</label><div class="data dmglastturn">0</div></div>
+        <div><label>Highest turn damage:</label><div class="data highstturndmg">0</div></div>
+        <div><label>Time:</label><div class="timer">0 mins 0.0 secs</div></div>
+
+        <button id="record" type="button" class="btn btn-outline-primary">Record</button> 
+        <button id="stop" type="button" class="btn btn-outline-primary">Stop</button>
+      </div>
     </div>
 
     <div class="tab-pane fade" id="logs">
@@ -64,7 +70,11 @@
     </div>
   </div>
 
-
+    <!-- Scripts should be placed in lib -->
+    <script type="text/javascript" src="../../../lib/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../../lib/popper.js"></script>    
+    <script src="../../../lib/bootstrap-4.2-dist/js/bootstrap.min.js"></script>
+    <script src="../../javascript/stop.js"></script>
     <script type="text/javascript" src="message.js"></script>
   </body>
 </html>
