@@ -78,7 +78,7 @@
             hideObject(msg.hideObject.id, msg.hideObject.value);
           } else if (msg.addQuest) {
             //addQuest(msg.addQuest.id, msg.addQuest.url, msg.addQuest.name, msg.addQuest.amount, msg.addQuest.max, msg.addQuest.animeIDs, msg.addQuest.animeAmounts);
-            addQuest(message.addQuest.id);
+            //addQuest(message.addQuest.id);
           } else if (msg.addDistinction) {
             addDistinction(msg.addDistinction.id, msg.addDistinction.amount, msg.addDistinction.max, msg.addDistinction.isEnabled);
           } else if (msg.collapsePanel) {
@@ -153,7 +153,7 @@
     }
     if (message.addQuest) {
       //addQuest(message.addQuest.id, message.addQuest.url, message.addQuest.name, message.addQuest.amount, message.addQuest.max, message.addQuest.animeIDs, message.addQuest.animeAmounts);
-      addQuest(message.addQuest.id);
+      //addQuest(message.addQuest.id);
       return;
     }
     if (message.addDistinction) {
@@ -464,4 +464,11 @@
     });
   });
 
+  $("#start-parse").click(function () {
+    Message.Post({ 'startParse': true });
+  });
+
+  $("#stop-parse").click(function () {
+    Message.Post({ 'stopParse': true });
+  });
 })();

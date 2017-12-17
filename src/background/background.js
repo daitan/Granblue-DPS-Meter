@@ -157,34 +157,40 @@
       if (message.consoleLog) {
         console.log(message.consoleLog);
       }
+      if (message.startParse) {
+        Quest.StartParse();
+      }
+      if (message.stopParse) {
+        Quest.StopParse();
+      }
       if (message.request) {
         //start quest -> ACTUALLY ENTER THE QUEST
         if (message.request.url.indexOf('/quest/create_quest?') !== -1) {
-          Quest.CreateQuest(message.request.response, message.id);
+          Quest.CreateQuest(message.request.response);
         }
 
         //join raid
         if (message.request.url.indexOf('/quest/raid_deck_data_create') !== -1) {
-          Quest.CreateQuest(message.request.response, message.id);
+          Quest.CreateQuest(message.request.response);
         }
         if (message.request.url.indexOf('retire.json') !== -1) {
-          Quest.AbandonQuest(message.request.payload);
+          Quest.StopParse();
         }
 
         //if (message.request.url.indexOf('/shop_exchange/activate_personal_support?_=') !== -1) {
         //  Buffs.StartBuff(message.request.response, message.request.payload);
         //}
         if (message.request.url.indexOf('/raid/start.json?_=') !== -1 || message.request.url.indexOf('/multiraid/start.json?_=') !== -1) {
-          Quest.StartBattle(message.request.response, message.id);
+          Quest.CreateQuest(message.request.response);
         }
         if (message.request.url.indexOf('/normal_attack_result.json?_=') !== -1) {
-          Quest.BattleAction(message.request.response, message.request.payload, message.id);
+          Quest.BattleAction(message.request.response, message.request.payload);
         }
         if (message.request.url.indexOf('/ability_result.json?_=') !== -1) {
-          Quest.BattleAction(message.request.response, message.request.payload, message.id);
+          Quest.BattleAction(message.request.response, message.request.payload);
         }
         if (message.request.url.indexOf('/summon_result.json?_=') !== -1) {
-          Quest.BattleAction(message.request.response, message.request.payload, message.id);
+          Quest.BattleAction(message.request.response, message.request.payload);
         }
         //if (message.request.url.indexOf('/quest/init_list') !== -1) {
         //  Quest.SetCurrentQuest(message.request.response);
