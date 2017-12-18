@@ -12,17 +12,17 @@
   var themeName      = '';
   var currentRaids   = [];
   
-  var questTemplate   = null;
-  var historyTemplate = $.parseHTML('<li><a rel="quest-1" href="#">Battle 1</a></li>');
+  //var questTemplate   = null;
+  //var historyTemplate = $.parseHTML('<li><a rel="quest-1" href="#">Battle 1</a></li>');
 
-  $.ajax({
-    url: './questtemplate.html',
-    async: false,
-    success: function (result) {
-      questTemplate = $.parseHTML(result);
-    }
-  })
-  console.log(questTemplate);
+  //$.ajax({
+  //  url: './questtemplate.html',
+  //  async: false,
+  //  success: function (result) {
+  //    questTemplate = $.parseHTML(result);
+  //  }
+  //})
+  //console.log(questTemplate);
 
   var $parserContainer  = $('.parser-container');
   var $historyContainer = $('.history');
