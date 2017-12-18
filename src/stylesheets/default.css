@@ -8845,3 +8845,8 @@ a.text-dark:focus, a.text-dark:hover {
 .pagination a:hover {
   text-decoration: none;
 }
+
+.parseWindow, .parseTable{
+  margin: 0 auto;
+  text-align: center;
+}
