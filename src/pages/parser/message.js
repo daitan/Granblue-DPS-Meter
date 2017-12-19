@@ -15,6 +15,8 @@
   var questTemplate   = null;
   var historyTemplate = $.parseHTML('<li><a rel="quest-1" href="#">Battle 1</a></li>');
 
+  var raidCount = 0;
+
   $.ajax({
     url: './questtemplate.html',
     async: false,
@@ -465,10 +467,32 @@
   });
 
   $("#start-parse").click(function () {
+    raidCount++;
     Message.Post({ 'startParse': true });
   });
 
   $("#stop-parse").click(function () {
+    // console.log($("#total-time-num").text()); //Checks if the value is correct
+    var num = raidCount;
+    var time = $("#total-time-num").text();
+    var totalDps = $("#total-dps-num").text();  
+    var totalDamage = $("#total-damage").text().split(':').pop().trim(); // Basically gets the value past the :
+    var turns = $("#total-turns").text().split(':').pop().trim();      
+    var totalDpt = $("#total-dpt").text().split(':').pop().trim(); 
+    var avgTDamage = $("#avg-turn-dmg").text().split(':').pop().trim();
+    var highTDamage = $("#highest-turn-dmg").text().split(':').pop().trim();   
+
+    $('<tr>').append(
+      $('<td>').text(num),
+      $('<td>').text(time),
+      $('<td>').text(turns),
+      $('<td>').text(totalDamage),
+      $('<td>').text(totalDps),
+      $('<td>').text(totalDpt),
+      $('<td>').text(avgTDamage),
+      $('<td>').text(highTDamage)
+    ).appendTo('#parseTable tbody')
+
     Message.Post({ 'stopParse': true });
   });
 })();

@@ -610,16 +610,16 @@
       parses[id].ttlDps = parses[id].ttlDmg / secs;
       Message.PostAll({
         'setText': {
-          'id': '#total-dps',
-          'value': 'Total dps: ' + Math.round10(parses[id].ttlDps, -2)
+          'id': '#total-dps-num',
+          'value': '' + Math.round10(parses[id].ttlDps, -2)
         }
       });
       var minutes = secs / 60 | 0;
       secs = ((secs * 1000) % 60000) / 1000;
       Message.PostAll({
         'setText': {
-          'id': '#total-time',
-          'value': 'Time: ' + minutes + ":" + Math.round10(secs, -1)
+          'id': '#total-time-num',
+          'value': '' + minutes + ":" + Math.round10(secs, -1)
         }
       });
     }
@@ -656,8 +656,8 @@
     if (currParse.stTime === null) {
       Message.PostAll({
         'setText': {
-          'id': '#total-time',
-          'value': 'Time: 0.0'
+          'id': '#total-time-num',
+          'value': ''
         }
       });
     }
@@ -688,14 +688,14 @@
     }
     if (currParse.ttlDps !== null) {
       Message.PostAll({'setText': {
-          'id': '#total-dps',
-          'value': 'Total dps: ' + Math.round10(currParse.ttlDps, -2)
+          'id': '#total-dps-num',
+          'value': '' + Math.round10(currParse.ttlDps, -2)
         }
       });
     } else {
       Message.PostAll({'setText': {
-          'id': '#total-dps',
-          'value': 'Total dps: 0'
+          'id': '#total-dps-num',
+          'value': ''
         }
       });
     }

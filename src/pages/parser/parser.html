@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    -->
+    -->  
   <ul class="nav nav-tabs">
     <li class="nav-item">
       <a class="nav-link active" data-toggle="tab" href="#parse">Parse</a>
@@ -33,11 +33,13 @@
     </li>
   </ul>
   <div id="myTabContent" class="tab-content">
-    <div class="tab-pane fade active in" id="parse">
+    <div class="tab-pane active in" id="parse">
       <div class="parseWindow"> 
         <div class="parseTable">
           <div id="total-dps" class="number">Total dps:</div>
           <div id="total-time" class="number">Time:</div>
+          <div id="total-dps-num" class="number"> 0 </div>
+          <div id="total-time-num" class="number"> 0 </div>          
           <div id="total-damage" class="number">Total damage:</div>
           <div id="total-turns" class="number">Turns:</div>
           <div id="total-dpt" class="number">Total dpt:</div>
@@ -45,8 +47,8 @@
           <div id="highest-turn-dmg" class="number">Highest turn damage:</div>
         </div>
         <div class="buttons">
-          <button id="record" type="button" class="btn btn-outline-primary">Record</button> 
-          <button id="stop" type="button" class="btn btn-outline-primary">Stop</button>
+          <button id="start-parse" type="button" class="btn btn-outline-primary">Record</button> 
+          <button id="stop-parse" type="button" class="btn btn-outline-primary">Stop</button>
         </div>
       </div>
     </div>
@@ -75,32 +77,6 @@
     <script type="text/javascript" src="../../../lib/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../../../lib/popper.js"></script>    
     <script src="../../../lib/bootstrap-4.2-dist/js/bootstrap.min.js"></script>
-    <script src="../../javascript/stop.js"></script>
-<!-- =======
-    <div id="contents">
-      <div class="parser-container">
-        <h3 class="parser-drawer-heading quest">Battle 1</h3>
-        <div class="quest-data" id="quest">
-          <h2>Battle 1</h2>
-          <div class="totals-container">
-            <div id="totals">
-              <div id="total-time" class="number">Time:</div>
-              <div id="total-turns" class="number">Turns:</div>
-              <div id="total-damage" class="number">Total damage:</div>
-              <div id="total-dps" class="number">Total dps:</div>
-              <div id="total-dpt" class="number">Total dpt:</div>
-              <div id="avg-turn-dmg" class="number">Average turn damage:</div>
-              <div id="highest-turn-dmg" class="number">Highest turn damage:</div>
-              <button id="start-parse">Start</button>
-              <button id="stop-parse">Stop</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <ul class="history">
-      </ul>
-    </div>
->>>>>>> master -->
     <script type="text/javascript" src="message.js"></script>
   </body>
 </html>
