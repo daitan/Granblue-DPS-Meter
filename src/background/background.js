@@ -166,12 +166,12 @@
       if (message.request) {
         //start quest -> ACTUALLY ENTER THE QUEST
         if (message.request.url.indexOf('/quest/create_quest?') !== -1) {
-          Quest.CreateQuest(message.request.response);
+          //Quest.CreateQuest(message.request.response);
         }
 
         //join raid
         if (message.request.url.indexOf('/quest/raid_deck_data_create') !== -1) {
-          Quest.CreateQuest(message.request.response);
+          //Quest.CreateQuest(message.request.response);
         }
         if (message.request.url.indexOf('retire.json') !== -1) {
           Quest.StopParse();
