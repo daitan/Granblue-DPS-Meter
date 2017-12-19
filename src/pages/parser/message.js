@@ -15,6 +15,8 @@
   //var questTemplate   = null;
   //var historyTemplate = $.parseHTML('<li><a rel="quest-1" href="#">Battle 1</a></li>');
 
+  var raidCount = 0;
+  
   //$.ajax({
   //  url: './questtemplate.html',
   //  async: false,
