@@ -8846,7 +8846,42 @@ a.text-dark:focus, a.text-dark:hover {
   text-decoration: none;
 }
 
-.parseWindow, .parseTable{
-  margin: 0 auto;
+/*Custom CSS done. These are made manually and not part of the bootstrap*/
+
+.parseWindow{
+  max-width:60%;
+  min-width: 700px;
+  margin:5px auto;
+}
+.parseTable{
+  width:100%;
+  display: inline-block;
+  white-space: nowrap;
+}
+.buttons{
   text-align: center;
+}
+.number{
+  display: inline-block;
+}
+
+#total-dps,#total-time,#avg-turn-dmg, #highest-turn-dmg{
+  width: 50%;
+  float: left;
+}
+#total-damage,#total-turns,#total-dpt{
+  width: 33.3333%;
+  float: left;
+  clear: right;
+}
+
+#total-dps, #total-time{
+  font-size: 38px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#avg-turn-dmg, #highest-turn-dmg, #total-damage, #total-turns, #total-dpt{
+  font-size: 21px;
+  text-align: left;
 }

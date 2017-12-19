@@ -35,28 +35,19 @@
   <div id="myTabContent" class="tab-content">
     <div class="tab-pane fade active in" id="parse">
       <div class="parseWindow"> 
-        <table class="parseTable">
-          <tr>
-            <td colspan="2"><h1> Total DPS: </h1></td>
-            <td colspan="2"><h1> Time: </h1></td>
-          </tr>
-          <tr>
-            <td colspan="2"> 11.00 </td>
-            <td colspan="2"> 2min30s </td>            
-          </tr>
-          <tr>
-            <td><h3> Total damage: </h3> 333 333 </td>
-            <td colspan="2"><h3> Turns: </h3> 20 </td>
-            <td><h3> Total DPS: </h3> 23</td> 
-          </tr>
-          <tr>
-            <td colspan="2"><h3> Highest turn damage: </h3>123 456 </td>
-            <td colspan="2"><h3> Current turn damage </h3> 3245</td>            
-          </tr>
-        </table>
-
-        <button id="record" type="button" class="btn btn-outline-primary">Record</button> 
-        <button id="stop" type="button" class="btn btn-outline-primary">Stop</button>
+        <div class="parseTable">
+          <div id="total-dps" class="number">Total dps:</div>
+          <div id="total-time" class="number">Time:</div>
+          <div id="total-damage" class="number">Total damage:</div>
+          <div id="total-turns" class="number">Turns:</div>
+          <div id="total-dpt" class="number">Total dpt:</div>
+          <div id="avg-turn-dmg" class="number">Average turn damage:</div>
+          <div id="highest-turn-dmg" class="number">Highest turn damage:</div>
+        </div>
+        <div class="buttons">
+          <button id="record" type="button" class="btn btn-outline-primary">Record</button> 
+          <button id="stop" type="button" class="btn btn-outline-primary">Stop</button>
+        </div>
       </div>
     </div>
 
@@ -85,6 +76,31 @@
     <script type="text/javascript" src="../../../lib/popper.js"></script>    
     <script src="../../../lib/bootstrap-4.2-dist/js/bootstrap.min.js"></script>
     <script src="../../javascript/stop.js"></script>
+<!-- =======
+    <div id="contents">
+      <div class="parser-container">
+        <h3 class="parser-drawer-heading quest">Battle 1</h3>
+        <div class="quest-data" id="quest">
+          <h2>Battle 1</h2>
+          <div class="totals-container">
+            <div id="totals">
+              <div id="total-time" class="number">Time:</div>
+              <div id="total-turns" class="number">Turns:</div>
+              <div id="total-damage" class="number">Total damage:</div>
+              <div id="total-dps" class="number">Total dps:</div>
+              <div id="total-dpt" class="number">Total dpt:</div>
+              <div id="avg-turn-dmg" class="number">Average turn damage:</div>
+              <div id="highest-turn-dmg" class="number">Highest turn damage:</div>
+              <button id="start-parse">Start</button>
+              <button id="stop-parse">Stop</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="history">
+      </ul>
+    </div>
+>>>>>>> master -->
     <script type="text/javascript" src="message.js"></script>
   </body>
 </html>
