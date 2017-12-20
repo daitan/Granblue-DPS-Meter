@@ -274,6 +274,35 @@
     };
   }
 
+  /**
+     * Abbreviates numbers between 0 - 9,223,372,036,854,775,807 to a friendly format.
+     *
+     * @param   {Number}    n    The number to be shortened.
+     * @param   {Number}    d    Number of decimals to shorten to.
+     * @returns {Number}         The adjusted value.
+     */
+  var abbreviateNum = function(n, d) {
+    n = n >= 0 ? n : n * -1;
+    p = Math.pow;
+    d = p(10, d);
+    i = 7;
+    while (i) (s = p(10, i-- * 3)) <= n && (n = Math.round(n * d / s) / d + "kMGTPE"[i])
+    return n;
+  }
+
+  var formatTime = function (time) {
+    var secs = time / 1000.0;
+    var minutes = secs / 60 | 0;
+    secs = ((secs * 1000) % 60000) / 1000;
+    var s = '';
+    if (minutes > 0) {
+      s = minutes + 'm ' + Math.round10(secs, -1) + 's';
+    } else {
+      s = Math.round10(secs, -1) + 's';
+    }
+    return s;
+  }
+
   window.Quest = {
     Initialize: function(callback) {
       Storage.GetMultiple(['quests'], function(response) {
@@ -539,13 +568,15 @@
 
         if (isDamage == true) {
           currParse.ttlDpt = currParse.ttlDmg / (currParse.ttlTurns + 1);
-          if (isAttack == true) {
-            if (currParse.prevTurnDmg > currParse.maxTurnDmg) {
-              currParse.maxTurnDmg = currParse.prevTurnDmg;
-            }
-            
-            currParse.ttlTurns++;
+        }
+
+        if (isAttack == true) {
+          if (currParse.prevTurnDmg > currParse.maxTurnDmg) {
+            currParse.maxTurnDmg = currParse.prevTurnDmg;
           }
+
+          currParse.ttlTurns++;
+          currParse.avgTurnTime = currParse.time / currParse.ttlTurns;
         }
         
         startParseTimer(currParseID);
@@ -568,7 +599,6 @@
   };
 
   var processTime = function (id) {
-    console.log(id);
     if (parses[id] === undefined) {
       clearInterval(timer);
       return;
@@ -592,7 +622,7 @@
     }
     timer = setInterval(processTime, 100, id);
   };
-
+  
   var stopParseTimer = function (id) {
     if (parses[id] === undefined || parses[id].stTime === null) {
       return;
@@ -602,24 +632,47 @@
     parses[id].spTime = new Date().getTime();
     parses[id].time = parses[id].spTime - parses[id].stTime;
     setTimerJQuery(id);
+    Message.PostAll({
+      'addParse': {
+        'id': id,
+        'time': formatTime(parses[id].time),
+        'turns': parses[id].ttlTurns,
+        'ttlDmg': abbreviateNum(parses[id].ttlDmg, 2),
+        'ttlDps': abbreviateNum(parses[id].ttlDps, 2),
+        'ttlDpt': abbreviateNum(parses[id].ttlDpt, 2),
+        'avgTurnTime': formatTime(parses[id].avgTurnTime),
+        'maxTurnDmg': abbreviateNum(parses[id].maxTurnDmg, 2)
+      }
+    });
   };
 
   var setTimerJQuery = function (id) {
-    var secs = parses[id].time / 1000.0;
     if (parses[id].time > 0) {
-      parses[id].ttlDps = parses[id].ttlDmg / secs;
+      parses[id].ttlDps = parses[id].ttlDmg / (parses[id].time / 1000.0);
+      var t = formatTime(parses[id].time);
       Message.PostAll({
         'setText': {
           'id': '#total-dps-num',
-          'value': '' + Math.round10(parses[id].ttlDps, -2)
+          'value': '' + abbreviateNum(parses[id].ttlDps, 2)
         }
       });
-      var minutes = secs / 60 | 0;
-      secs = ((secs * 1000) % 60000) / 1000;
       Message.PostAll({
         'setText': {
           'id': '#total-time-num',
-          'value': '' + minutes + ":" + Math.round10(secs, -1)
+          'value': t
+        }
+      });
+    } else {
+      Message.PostAll({
+        'setText': {
+          'id': '#total-dps-num',
+          'value': '' + abbreviateNum(parses[id].ttlDmg, 2)
+        }
+      });
+      Message.PostAll({
+        'setText': {
+          'id': '#total-dps-num',
+          'value': '0 secs'
         }
       });
     }
@@ -657,7 +710,7 @@
       Message.PostAll({
         'setText': {
           'id': '#total-time-num',
-          'value': ''
+          'value': '0 secs'
         }
       });
     }
@@ -676,7 +729,7 @@
     if (currParse.ttlDmg !== null) {
       Message.PostAll({'setText': {
           'id': '#total-damage',
-          'value': 'Total damage: ' + currParse.ttlDmg
+          'value': 'Total damage: ' + abbreviateNum(currParse.ttlDmg, 2)
         }
       });
     } else {
@@ -689,7 +742,7 @@
     if (currParse.ttlDps !== null) {
       Message.PostAll({'setText': {
           'id': '#total-dps-num',
-          'value': '' + Math.round10(currParse.ttlDps, -2)
+          'value': abbreviateNum(currParse.ttlDps, 2)
         }
       });
     } else {
@@ -702,7 +755,7 @@
     if (currParse.ttlDpt !== null) {
       Message.PostAll({'setText': {
           'id': '#total-dpt',
-          'value': 'Total dpt: ' + Math.round10(currParse.ttlDpt, -2)
+          'value': 'Total dpt: ' + abbreviateNum(currParse.ttlDpt, 2)
         }
       });
     } else {
@@ -714,21 +767,21 @@
     }
     if (currParse.prevTurnDmg !== null) {
       Message.PostAll({'setText': {
-          'id': '#avg-turn-dmg',
-          'value': 'Previous turn damage: ' + currParse.prevTurnDmg
+        'id': '#current-turn-dmg',
+        'value': 'Current turn damage: ' + abbreviateNum(currParse.prevTurnDmg, 2)
         }
       });
     } else {
       Message.PostAll({'setText': {
-          'id': '#avg-turn-dmg',
-          'value': 'Previous turn damage: 0'
+          'id': '#current-turn-dmg',
+          'value': 'Current turn damage: 0'
         }
       });
     }
     if (currParse.maxTurnDmg !== null) {
       Message.PostAll({'setText': {
           'id': '#highest-turn-dmg',
-          'value': 'Highest turn damage: ' + currParse.maxTurnDmg
+          'value': 'Highest turn damage: ' + abbreviateNum(currParse.maxTurnDmg, 2)
         }
       });
     } else {

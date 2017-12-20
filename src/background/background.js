@@ -8,11 +8,7 @@
   var patchNotes = {
     '1.0.0': {
       'index': 0,
-      'notes': ['-Vira and Narumaya themes added',
-        '-Supply name + location tooltips added',
-        '(thanks lolPseudoSmart for supply locations)',
-        '-Primarch misc daily added',
-        '-Primarch raid + xeno jp names added']
+      'notes': ['-Initial release']
     }
   };
   var patchNoteList = [
@@ -22,9 +18,7 @@
 
   chrome.browserAction.onClicked.addListener(function() {
     //chrome.runtime.openOptionsPage();
-    chrome.tabs.create({ 'url': chrome.extension.getURL('src/pages/parser/parser.html') }, function (tab) {
-      // Tab opened.
-    });
+    chrome.tabs.create({ 'url': chrome.extension.getURL('src/pages/parser/parser.html') });
   });
 
   Storage.GetMultiple(['version'], function(response) {
@@ -46,9 +40,7 @@
   };
 
   Options.Initialize(function () {
-      Quest.Initialize(function () {
-          Buffs.Initialize();
-      });
+      Quest.Initialize();
   });
 
   var responseList = {};
@@ -85,7 +77,6 @@
 
   chrome.runtime.onConnect.addListener(function (port) {
     var extensionListener = function (message, sender) {
-      console.log(message);
       if (message.id === undefined) {
         if (sender.sender.tab !== undefined) {
           message.id = sender.sender.tab.id;
@@ -150,9 +141,6 @@
           });
           Time.UpdateAlertColor();
         })});
-      }
-      if (message.debug) {
-        Message.Notify('hey', 'its me ur brother', 'apNotifications');
       }
       if (message.consoleLog) {
         console.log(message.consoleLog);
@@ -232,38 +220,6 @@
         return true;
       } else {
         return false;
-      }
-    },
-
-    Notify: function(title, message, source) {
-      if (Options.Get('enableNotifications') && Options.Get(source)) {
-        var theme = Options.Get('notificationTheme');
-        if (theme === 'Random') {
-          var rand = Math.random() * 3;
-          if (rand < 1) {
-            theme = 'Sheep';
-          } else if (rand < 2) {
-            theme = 'Rooster';
-          } else {
-            theme = 'Monkey';
-          }
-        }
-        if (new Date().getMonth() === 3 && new Date().getDate() === 1) {
-          theme = 'Garbage';
-        }
-        if (!Options.Get('muteNotifications')) {
-          var sound = new Audio('src/assets/sounds/' + theme + '.wav');
-          sound.play();
-        }
-        if (Math.random() * 300 < 1) {
-          theme += '2';
-        }
-        chrome.notifications.create({
-          type:   'basic',
-          title:   title,
-          message: message,
-          iconUrl: 'src/assets/images/' + theme + '.png'
-        });
       }
     },
 

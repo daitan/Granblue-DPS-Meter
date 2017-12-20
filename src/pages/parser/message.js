@@ -11,35 +11,6 @@
   var imageURL       = '../../assets/images/';
   var themeName      = '';
   var currentRaids   = [];
-  
-  //var questTemplate   = null;
-  //var historyTemplate = $.parseHTML('<li><a rel="quest-1" href="#">Battle 1</a></li>');
-
-  var raidCount = 0;
-  
-  //$.ajax({
-  //  url: './questtemplate.html',
-  //  async: false,
-  //  success: function (result) {
-  //    questTemplate = $.parseHTML(result);
-  //  }
-  //})
-  //console.log(questTemplate);
-
-  var $parserContainer  = $('.parser-container');
-  var $historyContainer = $('.history');
-
-  $('.tooltip-down').tooltip();
-  
-  $('#time-zone').click(function() {
-    isJST = !isJST;
-    if (isJST) {
-      $(this).text('JST');
-    } else {
-      $(this).text(timeZone);
-    }
-    toggleTimes();
-  });
 
   var backgroundPageConnection = chrome.runtime.connect({
     name: 'panel'
@@ -48,7 +19,6 @@
     connect: -1
   });
   
-
   backgroundPageConnection.onMessage.addListener(function (message, sender) {
     if (message.pageLoad) {
       if (!initialized && message.pageLoad.indexOf('#mypage') !== -1) {
@@ -78,9 +48,8 @@
             addItem(msg.addItem.id, msg.addItem.category, msg.addItem.number, msg.addItem.name, msg.addItem.sequence, msg.addItem.tooltip);
           } else if (msg.hideObject) {
             hideObject(msg.hideObject.id, msg.hideObject.value);
-          } else if (msg.addQuest) {
-            //addQuest(msg.addQuest.id, msg.addQuest.url, msg.addQuest.name, msg.addQuest.amount, msg.addQuest.max, msg.addQuest.animeIDs, msg.addQuest.animeAmounts);
-            //addQuest(message.addQuest.id);
+          } else if (msg.addParse) {
+            addParse(message.addParse.id, message.addParse.time, message.addParse.turns, message.addParse.ttlDmg, message.addParse.ttlDps, message.addParse.ttlDpt, message.addParse.avgTurnTime, message.addParse.maxTurnDmg)
           } else if (msg.addDistinction) {
             addDistinction(msg.addDistinction.id, msg.addDistinction.amount, msg.addDistinction.max, msg.addDistinction.isEnabled);
           } else if (msg.collapsePanel) {
@@ -113,9 +82,6 @@
         }
       }
       $('#wait').hide();
-      if (themeName !== 'Vira' && themeName !== 'Narumaya') {
-        $('#contents').show();
-      }
     }
     if (message.setText) {
       setText(message.setText.id, message.setText.value);
@@ -153,9 +119,8 @@
       hideObject(message.hideObject.id, message.hideObject.value);
       return;
     }
-    if (message.addQuest) {
-      //addQuest(message.addQuest.id, message.addQuest.url, message.addQuest.name, message.addQuest.amount, message.addQuest.max, message.addQuest.animeIDs, message.addQuest.animeAmounts);
-      //addQuest(message.addQuest.id);
+    if (message.addParse) {
+      addParse(message.addParse.id, message.addParse.time, message.addParse.turns, message.addParse.ttlDmg, message.addParse.ttlDps, message.addParse.ttlDpt, message.addParse.avgTurnTime, message.addParse.maxTurnDmg)
       return;
     }
     if (message.addDistinction) {
@@ -311,16 +276,6 @@
     jQueryCache[targetID].before(jQueryCache[id]);
   };
 
-  var truncateNumber = function(value) {
-    if (value >= 1000000) {
-      return Math.round(value / 100000) + 'M';
-    } else if (value >= 10000) {
-      return Math.round(value / 1000) + 'k';
-    }
-    return value;
-  };
-  //function (id, imgUrl, name, amount, max, animeIDs, animeAmounts)
-
   var recursiveEachAppendID = function(element, id) {
     $(element).children().each(function () {
       var tempID = $(this).attr('id');
@@ -330,20 +285,35 @@
       recursiveEachAppendID(this, id);
     });
   }
+  var createParse = function () {
+    return {
+      questID: null,
+      ttlDmg: 0,
+      ttlDps: 0,
+      ttlDpt: 0,
+      ttlTurns: 0,
+      maxTurnDmg: 0,
+      prevTurnDmg: 0,
+      avgTurnTime: 0,
+      time: 0,
+      stTime: null,
+      spTime: null
+    }
+  }
+  var addParse = function (id, time, turns, ttlDmg, ttlDps, ttlDpt, avgTurnTime, maxTurnDmg) {
+    $('<tr id=\'parse-' + id + '\'>').append(
+      $('<td>').text(id),
+      $('<td>').text(time),
+      $('<td>').text(turns),
+      $('<td>').text(ttlDmg),
+      $('<td>').text(ttlDps),
+      $('<td>').text(ttlDpt),
+      $('<td>').text(avgTurnTime),
+      $('<td>').text(maxTurnDmg)
+    ).appendTo('#parseTable tbody')
+  }
 
   var addQuest = function (id) {
-    currentRaids.push(id);
-    var newRaid = $(questTemplate).clone();
-    var newRaidTab = $(historyTemplate).clone();
-    
-    $(newRaid[0]).attr('id', 'quest-' + id);
-    $(newRaid[2]).attr('id', 'quest-' + id);
-    recursiveEachAppendID(newRaid[2], id);
-    console.log(newRaid);
-    $(newRaidTab[0]).attr('rel', 'quest-' + id);
-
-    $parserContainer.prepend(newRaid);
-    $historyContainer.prepend(newRaidTab);
   };
 
   var addQuestCharacter = function(index) {
@@ -367,58 +337,26 @@
     $questEnemiesPanel.append(newEnemy);
   };
 
-  var filterSupplies = function(category) {
-    filter = category;
-    $supplyList.children().each(function(index) {
-      if (category === $(this).data('category') || category === 'all') {
-        $(this).show();
-      } else {
-        $(this).hide();
-      }
-    });
-  };
-
   var setTheme = function(theme) {
-    Message.Post({'consoleLog': theme});
-    var sheetURL = '../../stylesheets/';
-    var $bars = $('.progress-bar');
-    if (theme === 'Tiamat Night') {
-      sheetURL += 'night';
-      if ($bars.hasClass('progress-bar-danger')) {
-        $bars.removeClass('progress-bar-danger').addClass('progress-bar-custom');
-      }
-      $('rect[id=\'mask-fill\']').css('fill', '#2a2a2a');
-    }
-    else if (theme === 'Vira') {
-      sheetURL += 'garbage1';
-    }
-    else if (theme === 'Narumaya') {
-      sheetURL += 'garbage2';
-    }
-    else {
-      sheetURL += 'default';
-      if ($bars.hasClass('progress-bar-custom')) {
-        $bars.removeClass('progress-bar-custom').addClass('progress-bar-danger');
-      }
-      $('rect[id=\'mask-fill\']').css('fill', '#f5f5f5');
-    }
-    if (theme === 'Vira' || theme === 'Narumaya') {
-      //$('#contents').hide();
-      $('#wait').hide();
-      $('#garbage').show();
-    } else {
-      $('#garbage').hide();
-      if (initialized) {
-        $('#contents').show();
-        $('#wait').hide();
-      } else {
-        //$('#contents').hide();
-        $('#wait').show();
-      }
-    }
-    sheetURL += '.css';
-    document.getElementById('pagestyle').setAttribute('href', sheetURL);
-    themeName = theme;
+    //Message.Post({'consoleLog': theme});
+    //var sheetURL = '../../stylesheets/';
+    //var $bars = $('.progress-bar');
+    //if (theme === 'Tiamat Night') {
+    //  sheetURL += 'night';
+    //  if ($bars.hasClass('progress-bar-danger')) {
+    //    $bars.removeClass('progress-bar-danger').addClass('progress-bar-custom');
+    //  }
+    //  $('rect[id=\'mask-fill\']').css('fill', '#2a2a2a');
+    //} else {
+    //  sheetURL += 'default';
+    //  if ($bars.hasClass('progress-bar-custom')) {
+    //    $bars.removeClass('progress-bar-custom').addClass('progress-bar-danger');
+    //  }
+    //  $('rect[id=\'mask-fill\']').css('fill', '#f5f5f5');
+    //}
+    //sheetURL += '.css';
+    //document.getElementById('pagestyle').setAttribute('href', sheetURL);
+    //themeName = theme;
   };
 
   
@@ -467,32 +405,10 @@
   });
 
   $("#start-parse").click(function () {
-    raidCount++;
     Message.Post({ 'startParse': true });
   });
 
   $("#stop-parse").click(function () {
-    // console.log($("#total-time-num").text()); //Checks if the value is correct
-    var num = raidCount;
-    var time = $("#total-time-num").text();
-    var totalDps = $("#total-dps-num").text();  
-    var totalDamage = $("#total-damage").text().split(':').pop().trim(); // Basically gets the value past the :
-    var turns = $("#total-turns").text().split(':').pop().trim();      
-    var totalDpt = $("#total-dpt").text().split(':').pop().trim(); 
-    var avgTDamage = $("#avg-turn-dmg").text().split(':').pop().trim();
-    var highTDamage = $("#highest-turn-dmg").text().split(':').pop().trim();   
-
-    $('<tr>').append(
-      $('<td>').text(num),
-      $('<td>').text(time),
-      $('<td>').text(turns),
-      $('<td>').text(totalDamage),
-      $('<td>').text(totalDps),
-      $('<td>').text(totalDpt),
-      $('<td>').text(avgTDamage),
-      $('<td>').text(highTDamage)
-    ).appendTo('#parseTable tbody')
-
     Message.Post({ 'stopParse': true });
   });
 })();

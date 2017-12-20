@@ -8865,7 +8865,7 @@ a.text-dark:focus, a.text-dark:hover {
   display: inline-block;
 }
 
-#total-dps,#total-time,#avg-turn-dmg, #highest-turn-dmg, #total-dps-num, #total-time-num{
+#total-dps,#total-time,#current-turn-dmg, #highest-turn-dmg, #total-dps-num, #total-time-num{
   width: 50%;
   float: left;
 }
@@ -8881,7 +8881,7 @@ a.text-dark:focus, a.text-dark:hover {
   text-align: center;
 }
 
-#avg-turn-dmg, #highest-turn-dmg, #total-damage, #total-turns, #total-dpt{
+#current-turn-dmg, #highest-turn-dmg, #total-damage, #total-turns, #total-dpt{
   font-size: 21px;
   text-align: left;
 }

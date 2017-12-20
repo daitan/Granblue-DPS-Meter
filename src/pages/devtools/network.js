@@ -52,4 +52,8 @@
       });
     }
   });
+
+  $("#open-parser").click(function () {
+    chrome.tabs.create({ 'url': chrome.extension.getURL('src/pages/parser/parser.html') });
+  });
 })();
